@@ -72,12 +72,12 @@ if [ $DOWNLOAD_OPENCV_EXTRAS == "YES" ] ; then
 fi
 
 # Repository setup
-sudo apt-add-repository universe
-sudo apt-get update
+apt-add-repository universe
+apt-get update
 
 # Download dependencies for the desired configuration
 cd $WHEREAMI
-sudo apt-get install -y \
+apt-get install -y \
     build-essential \
     cmake \
     libavcodec-dev \
@@ -103,15 +103,15 @@ sudo apt-get install -y \
 # We will be supporting OpenGL, we need a little magic to help
 # https://devtalk.nvidia.com/default/topic/1007290/jetson-tx2/building-opencv-with-opengl-support-/post/5141945/#5141945
 cd /usr/local/cuda/include
-sudo patch -N cuda_gl_interop.h $WHEREAMI'/patches/OpenGLHeader.patch' 
+patch -N cuda_gl_interop.h $WHEREAMI'/patches/OpenGLHeader.patch' 
 
 # Python 2.7
-sudo apt-get install -y python-dev  python-numpy  python-py  python-pytest
+apt-get install -y python-dev  python-numpy  python-py  python-pytest
 # Python 3.6
-sudo apt-get install -y python3-dev python3-numpy python3-py python3-pytest
+apt-get install -y python3-dev python3-numpy python3-py python3-pytest
 
 # GStreamer support
-sudo apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev 
+apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev 
 
 cd $OPENCV_SOURCE_DIR
 git clone --branch "$OPENCV_VERSION" https://github.com/opencv/opencv.git
@@ -203,8 +203,8 @@ else
 fi
 
 echo "Installing ... "
-sudo make install
-sudo ldconfig
+make install
+ldconfig
 if [ $? -eq 0 ] ; then
    echo "OpenCV installed in: $CMAKE_INSTALL_PREFIX"
 else
@@ -216,8 +216,8 @@ fi
 # We should still be in the build directory ...
 if [ "$PACKAGE_OPENCV" != "" ] ; then
    echo "Starting Packaging"
-   sudo ldconfig  
-   time sudo make package -j$NUM_JOBS
+   ldconfig  
+   time make package -j$NUM_JOBS
    if [ $? -eq 0 ] ; then
      echo "OpenCV make package successful"
    else
@@ -226,7 +226,7 @@ if [ "$PACKAGE_OPENCV" != "" ] ; then
      echo "Make package did not build " >&2
      echo "Retrying ... "
      # Single thread this time
-     sudo make package
+     make package
      if [ $? -eq 0 ] ; then
        echo "OpenCV make package successful"
      else
